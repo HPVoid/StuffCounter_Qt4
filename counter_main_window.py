@@ -233,26 +233,26 @@ class Ui_MainWindow(object):
         self.cb_start_active.setAccessibleName("")
         self.cb_start_active.setStyleSheet("border-width: 0px;\n"
 "")
-        self.cb_start_active.setObjectName("cb_start_active")
-        self.cb_start_active_2 = QtWidgets.QCheckBox(self.frame_click_counter)
-        self.cb_start_active_2.setGeometry(QtCore.QRect(20, 100, 181, 31))
+
+        self.cb_auto_start = QtWidgets.QCheckBox(self.frame_click_counter)
+        self.cb_auto_start.setGeometry(QtCore.QRect(20, 100, 181, 31))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.cb_start_active_2.setFont(font)
-        self.cb_start_active_2.setAccessibleName("")
-        self.cb_start_active_2.setStyleSheet("border-width: 0px;\n"
+        self.cb_auto_start.setFont(font)
+        self.cb_auto_start.setAccessibleName("")
+        self.cb_auto_start.setStyleSheet("border-width: 0px;\n"
 "")
-        self.cb_start_active_2.setObjectName("cb_start_active_2")
-        self.cb_start_active_3 = QtWidgets.QCheckBox(self.frame_click_counter)
-        self.cb_start_active_3.setGeometry(QtCore.QRect(20, 130, 141, 31))
+
+        self.cb_auto_export = QtWidgets.QCheckBox(self.frame_click_counter)
+        self.cb_auto_export.setGeometry(QtCore.QRect(20, 130, 141, 31))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.cb_start_active_3.setFont(font)
-        self.cb_start_active_3.setToolTip("This will export the hourly mouseclicks to a csv-file in your counter directory.")
-        self.cb_start_active_3.setAccessibleName("")
-        self.cb_start_active_3.setStyleSheet("border-width: 0px;\n"
+        self.cb_auto_export.setFont(font)
+        self.cb_auto_export.setToolTip("This will export the hourly mouseclicks to a csv-file in your counter directory.")
+        self.cb_auto_export.setAccessibleName("")
+        self.cb_auto_export.setStyleSheet("border-width: 0px;\n"
 "")
-        self.cb_start_active_3.setObjectName("cb_start_active_3")
+
         self.label_5 = QtWidgets.QLabel(self.frame_click_counter)
         self.label_5.setGeometry(QtCore.QRect(10, 4, 121, 20))
         font = QtGui.QFont()
@@ -316,8 +316,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "LMB"))
         self.label_4.setText(_translate("MainWindow", "RMB"))
         self.cb_start_active.setText(_translate("MainWindow", "Start activated"))
-        self.cb_start_active_2.setText(_translate("MainWindow", "Add to windows auto-run"))
-        self.cb_start_active_3.setText(_translate("MainWindow", "Automatic Export"))
+        self.cb_auto_start.setText(_translate("MainWindow", "Add to windows auto-run"))
+        self.cb_auto_export.setText(_translate("MainWindow", "Automatic Export"))
         self.label_5.setText(_translate("MainWindow", "Click counter"))
         self.label_6.setText(_translate("MainWindow", "temporary click count:"))
         self.label.setText(_translate("MainWindow", "Stuff Counter"))

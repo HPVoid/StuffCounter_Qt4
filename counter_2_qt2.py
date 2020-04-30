@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont
 import sys
-from counter_main_window import Ui_MainWindow
+from counter_main_window import Ui_MainWindow, MyEntry
 from counterprofile1 import CounterProfile
 from profile_frame_widget import ProfileFrame
 import win32api
@@ -62,7 +62,7 @@ class CounterApp(Ui_MainWindow):
 
         self.add.clicked.connect(self.add_profile_wrap)
         self.reset.clicked.connect(self.sure)
-        #self.export.clicked.connect(self.export)
+        self.export_click.clicked.connect(self.click_export)
         self.click.clicked[bool].connect(self.click_counter)
 
         #open click counts on startup
@@ -92,9 +92,45 @@ class CounterApp(Ui_MainWindow):
             self.add_frame(key)
 
         #open the state of checkboxes on startup
-        file3 = open("state.txt","r")
-        file3_str = file3.read()
+        self.cb_start_active.checkStateSet()
 
+        file3 = open("state.txt","r")
+        file3_list = eval(file3.read())
+    
+
+        self.cb_start_active.setChecked(file3_list[0])
+        self.cb_auto_start.setChecked(file3_list[1])
+        self.cb_auto_export.setChecked(file3_list[2])
+
+        self.cb_start_active.stateChanged.connect(self.set_start_active)
+        self.cb_auto_start.stateChanged.connect(self.set_auto_start)
+        self.cb_auto_export.stateChanged.connect(self.set_auto_export)
+
+
+
+    def set_start_active(self):
+        file3 = open("state.txt","w")
+        file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
+        file3.close()
+
+    def set_auto_start(self):
+        file3 = open("state.txt","w")
+        file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
+        file3.close()
+
+    #if os.path.exists(self.bat_path + '\\' + "StuffCounter.bat") and self.var_auto_start.get()==0:
+    #    os.remove(self.bat_path + '\\' + "StuffCounter.bat")
+    #    return
+
+    #with open(self.bat_path + '\\' + "StuffCounter.bat", "w+") as bat_file:
+    #    bat_file.write(r'set workingdir=%s' % self.file_dir + "\n" + r'pushd %workingdir%' + "\n" + r'start "" counter_2.exe')
+
+    def set_auto_export(self):
+        file3 = open("state.txt","w")
+        file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
+        file3.close()
+    #self.label_5.configure(text="temp.: " + str(self.click_count_l_temp) + " " + str(self.click_count_r_temp))
+    #self.time_loop()
 
 
 
@@ -139,13 +175,112 @@ class CounterApp(Ui_MainWindow):
             #file3.write(str(self.var_start_active.get()) + str(self.var_auto_start.get()) + str(self.var_auto_export.get()))
             #file3.close()
             #self.cb_auto_export.configure(state=DISABLED)
+
     def reset_click_counter(self):
         self.click_count_l = 0
         self.click_count_r = 0
         self.lcd_lmb.display(self.click_count_l)
         self.lcd_rmb.display(self.click_count_r)
         #self.reset_click_counter_temp()
-        #self.sure.close()
+
+    def click_export(self):
+
+        def ok():
+            if dropdown.currentIndex() == 0:
+                write_exp_file_txt()
+            if dropdown.currentIndex() == 1:
+                write_exp_file_csv()
+
+        def write_exp_file_txt():
+            exp_file = open((export_entry.toPlainText()+".txt"),"w")
+            exp_file.write("LMB: "+str(self.click_count_l)+" RMB: "+str(self.click_count_r))
+            exp_file.close()
+
+        def write_exp_file_csv():
+            exp_file = open((export_entry.toPlainText()+".csv"),"w")
+            exp_file.write("LMB; RMB\n{0}; {1}".format(str(self.click_count_l), str(self.click_count_r)))
+            exp_file.close()
+
+        Export_Dialog = QtWidgets.QDialog()
+        Export_Dialog.setStyleSheet("background-color: rgb(52, 61, 54);")
+
+        export_layout = QtWidgets.QHBoxLayout(Export_Dialog)
+        Export_Dialog.resize(400, 30)
+        export_layout.setContentsMargins(10, 10, 10, 10)
+        export_layout.setObjectName("box_layout")
+
+        export_text = QtWidgets.QLabel(Export_Dialog)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        export_text.setFont(font)
+        export_text.setStyleSheet("color: rgb(79, 103, 81);\n"
+    "border-style: flat;\n"
+    "border-width: 0px;\n"
+    "border-radius: 0px;\n"
+    "border-width: 0px;\n"
+    "")
+        export_text.setText("Filename:")
+
+        export_entry = QtWidgets.QTextEdit(Export_Dialog)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(75)
+        export_entry.setFont(font)
+        export_entry.setFixedHeight(30)
+        export_entry.setStyleSheet("background-color:rgb(0, 0, 0);\n"
+"color: rgb(79, 103, 81);"
+"border-color: rgb(79, 103, 81);\n"
+"border-style: solid;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;")
+
+        dropdown = QtWidgets.QComboBox(Export_Dialog)
+        dropdown.addItems([".txt", ".csv"])
+        dropdown.setStyleSheet("background-color: rgb(55, 72, 57);\n"
+    "border-width: 1px;\n"
+    "border-color: rgb(55, 72, 57);\n"
+    )
+        dropdown.setFixedHeight(30)
+        dropdown.setFixedWidth(50)
+
+        export_button = QtWidgets.QPushButton(Export_Dialog)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        export_button.setFont(font)
+        export_button.setText("Export")
+        export_button.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+    "border-style: outset;\n"
+    "border-width: 1px;\n"
+    "border-radius: 10px;\n"
+    "border-color: rgb(55, 72, 57);}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+        export_button.setFixedHeight(30)
+        export_button.setFixedWidth(60)
+        export_button.setDefault(True)
+        export_button.clicked.connect(ok)
+        export_button.clicked.connect(Export_Dialog.close)
+
+
+        export_layout.addWidget(export_text)
+        export_layout.addWidget(export_entry)
+        export_layout.addWidget(dropdown)
+        export_layout.addWidget(export_button)
+
+
+
+        Export_Dialog.show()
+        Export_Dialog.exec()
+
+        #var_format = StringVar()
+        #var_format.set(".txt")
+        #ok_button = Button(export, text="OK", command = ok)
+        #ok_button.pack(pady=5, padx=5,side=RIGHT)
+        #export_dropdown = OptionMenu(export, var_format, ".txt", ".csv")
+        #export_dropdown.configure(width = 5)
+        #export_dropdown.pack(pady=5, padx=5,side=RIGHT)
 
     def store_click_count(self):
         file2 = open("click_count.txt","w")
@@ -232,6 +367,7 @@ class CounterApp(Ui_MainWindow):
     "border-style: outset;\n"
     "border-width: 1px;\n"
     "border-radius: 10px;\n"
+
     "border-color: rgb(55, 72, 57);}\n"
     "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
         botton_no.setDefault(True)
