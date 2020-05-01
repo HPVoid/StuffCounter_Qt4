@@ -2,13 +2,334 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont
 import sys
-from counter_main_window import Ui_MainWindow, MyEntry
+from counter_main_window import Ui_MainWindow, MyEntry, Mainwindow_changed
 from counterprofile1 import CounterProfile
-from profile_frame_widget import ProfileFrame
+from profile_frame_qt import ProfileFrame
 import win32api
 from datetime import datetime
 import time
+import os
+import getpass
 
+class MyEntry(QtWidgets.QTextEdit):
+
+    def __init__(self, parent, master):
+        super().__init__(parent)
+        self.master = master
+
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == Qt.Key_Return:
+            self.master.add_profile_wrap()
+            return
+        super().keyPressEvent(QKeyEvent)
+
+class SystemTray(QtWidgets.QSystemTrayIcon):
+
+    def __init__(self, parent = None):
+        QtWidgets.QSystemTrayIcon.__init__(self, parent)
+        self.setIcon(QtGui.QIcon("Icon.png"))
+
+        menu = QtWidgets.QMenu(parent)
+        menu.addAction("Show")
+        menu.addAction("Quit")
+
+
+        self.setContextMenu(menu)
+        self.contextMenu().triggered.connect(self.triggered)
+
+    def triggered(self, action):
+        if action.text() == "Quit":
+            self.hide()
+            app.quit()
+        if action.text() == "Show":
+            MainWindow.show()
+
+
+
+
+class Mainwindow_changed(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.trayIcon = SystemTray(self)
+
+
+    def closeEvent(self, event):
+        event.ignore()
+        self.hide()
+        self.trayIcon.show()
+
+class Ui_MainWindow(object):
+
+    def setupUi(self, MainWindow):
+        self.set_size = 22
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(599, 441+self.set_size)
+        MainWindow.setWindowTitle("MainWindow")
+        MainWindow.setStyleSheet("background-color: rgb(52, 61, 54);")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        MainWindow.setWindowIcon(QIcon("Icon.png"))
+
+        self.frame_just_count = QtWidgets.QFrame(self.centralwidget)
+        self.frame_just_count.setGeometry(QtCore.QRect(0, 60, 600, 181+self.set_size))
+        self.frame_just_count.setAutoFillBackground(False)
+        self.frame_just_count.setStyleSheet("border-color: rgb(79, 103, 81);\n"
+"border-style: solid;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;")
+        self.frame_just_count.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_just_count.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_just_count.setLineWidth(2)
+        self.frame_just_count.setMidLineWidth(0)
+        self.frame_just_count.setObjectName("frame_just_count")
+        self.label_2 = QtWidgets.QLabel(self.frame_just_count)
+        self.label_2.setGeometry(QtCore.QRect(10, 4, 121, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_2.setFont(font)
+        self.label_2.setAccessibleName("")
+        self.label_2.setStyleSheet("color: rgb(79, 103, 81);\n"
+"border-style: flat;\n"
+"border-width: 0px;\n"
+"border-radius: 0px;\n"
+"border-width: 0px;\n"
+"")
+        self.label_2.setTextFormat(QtCore.Qt.AutoText)
+        self.label_2.setObjectName("label_2")
+        self.entry = MyEntry(self.frame_just_count, self)
+        self.entry.setGeometry(QtCore.QRect(10, 140+self.set_size, 401, 31))
+        self.entry.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(75)
+        self.entry.setFont(font)
+        self.entry.setStyleSheet("background-color:rgb(0, 0, 0);\n"
+"color: rgb(79, 103, 81);")
+        self.entry.setObjectName("entry")
+        self.add = QtWidgets.QPushButton(self.frame_just_count)
+        self.add.setGeometry(QtCore.QRect(420, 140+self.set_size, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.add.setFont(font)
+        self.add.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(55, 72, 57);}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+        self.add.setDefault(True)
+        self.add.setObjectName("add")
+
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.frame_just_count)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 29, 581, 101+self.set_size))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayoutWidget.setStyleSheet("color: rgb(79, 103, 81);\n"
+"border-style: flat;\n"
+"border-width: 0px;\n"
+"border-radius: 0px;\n"
+"border-width: 0px;\n"
+"")
+        self.box_layout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.box_layout.setContentsMargins(0, 0, 0, 0)
+        self.box_layout.setObjectName("box_layout")
+
+        self.scroll = QtWidgets.QScrollArea()
+        self.scroll.setWidgetResizable(True)
+
+        self.group_box = QtWidgets.QGroupBox()
+        self.form_layout = QtWidgets.QFormLayout()
+        self.group_box.setLayout(self.form_layout)
+        self.box_layout.addWidget(self.scroll)
+
+        self.frame_click_counter = QtWidgets.QFrame(self.centralwidget)
+        self.frame_click_counter.setGeometry(QtCore.QRect(0, 250+self.set_size, 600, 171))
+        self.frame_click_counter.setStyleSheet("\n"
+"border-color:rgb(79, 103, 81);\n"
+"border-style: solid;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;")
+        self.frame_click_counter.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_click_counter.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_click_counter.setLineWidth(2)
+        self.frame_click_counter.setObjectName("frame_click_counter")
+        self.click = QtWidgets.QPushButton(self.frame_click_counter)
+        self.click.setGeometry(QtCore.QRect(10, 30, 161, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.click.setFont(font)
+        self.click.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(55, 72, 57);}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+        self.click.setObjectName("click")
+        self.click.setCheckable(True)
+        self.reset = QtWidgets.QPushButton(self.frame_click_counter)
+        self.reset.setGeometry(QtCore.QRect(190, 30, 75, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.reset.setFont(font)
+        self.reset.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(55, 72, 57);}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+        self.reset.setObjectName("reset")
+        self.export_click = QtWidgets.QPushButton(self.frame_click_counter)
+        self.export_click.setGeometry(QtCore.QRect(280, 30, 75, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.export_click.setFont(font)
+        self.export_click.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(55, 72, 57);}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+        self.export_click.setObjectName("export_click")
+        self.frame_lmb = QtWidgets.QFrame(self.frame_click_counter)
+        self.frame_lmb.setGeometry(QtCore.QRect(380, 10, 101, 71))
+        self.frame_lmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_lmb.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_lmb.setObjectName("frame_lmb")
+        self.lcd_lmb = QtWidgets.QLCDNumber(self.frame_lmb)
+        self.lcd_lmb.setGeometry(QtCore.QRect(10, 30, 81, 31))
+        self.lcd_lmb.setStyleSheet("border-radius: 5px;\n"
+"gridline-color: rgb(0, 85, 0);\n"
+"color: rgb(170, 0, 0);\n"
+"background-color: rgb(0, 0, 0);")
+        self.lcd_lmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.lcd_lmb.setObjectName("lcd_lmb")
+        self.lcd_lmb.setDigitCount(6)
+        self.label_3 = QtWidgets.QLabel(self.frame_lmb)
+        self.label_3.setGeometry(QtCore.QRect(35, 6, 31, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("border-width: 0px;\n"
+"border-radius: 0px;")
+        self.label_3.setObjectName("label_3")
+        self.frame_rmb = QtWidgets.QFrame(self.frame_click_counter)
+        self.frame_rmb.setGeometry(QtCore.QRect(490, 10, 101, 71))
+        self.frame_rmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_rmb.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_rmb.setObjectName("frame_rmb")
+        self.lcd_rmb = QtWidgets.QLCDNumber(self.frame_rmb)
+        self.lcd_rmb.setGeometry(QtCore.QRect(10, 30, 81, 31))
+        self.lcd_rmb.setStyleSheet("border-radius: 5px;\n"
+"gridline-color: rgb(0, 85, 0);\n"
+"color: rgb(170, 0, 0);\n"
+"background-color: rgb(0, 0, 0);")
+        self.lcd_rmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.lcd_rmb.setSmallDecimalPoint(False)
+        self.lcd_rmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+        self.lcd_rmb.setObjectName("lcd_rmb")
+        self.lcd_rmb.setDigitCount(6)
+        self.label_4 = QtWidgets.QLabel(self.frame_rmb)
+        self.label_4.setGeometry(QtCore.QRect(32, 6, 41, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("border-width: 0px;\n"
+"border-radius: 0px;")
+        self.label_4.setObjectName("label_4")
+        self.cb_start_active = QtWidgets.QCheckBox(self.frame_click_counter)
+        self.cb_start_active.setGeometry(QtCore.QRect(20, 70, 141, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.cb_start_active.setFont(font)
+        self.cb_start_active.setStyleSheet("border-width: 0px;\n"
+"")
+
+        self.cb_auto_start = QtWidgets.QCheckBox(self.frame_click_counter)
+        self.cb_auto_start.setGeometry(QtCore.QRect(20, 100, 181, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.cb_auto_start.setFont(font)
+        self.cb_auto_start.setStyleSheet("border-width: 0px;\n"
+"")
+
+        self.cb_auto_export = QtWidgets.QCheckBox(self.frame_click_counter)
+        self.cb_auto_export.setGeometry(QtCore.QRect(20, 130, 141, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.cb_auto_export.setFont(font)
+        self.cb_auto_export.setToolTip("This will export the hourly mouseclicks to a csv-file in your counter directory.")
+        self.cb_auto_export.setStyleSheet("border-width: 0px;\n"
+"")
+
+        self.label_5 = QtWidgets.QLabel(self.frame_click_counter)
+        self.label_5.setGeometry(QtCore.QRect(10, 4, 121, 20))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(False)
+        font.setWeight(50)
+        self.label_5.setFont(font)
+        self.label_5.setStyleSheet("color: rgb(79, 103, 81);\n"
+"border-style: flat;\n"
+"border-width: 0px;\n"
+"border-radius: 0px;\n"
+"border-width: 0px;\n"
+"")
+        self.label_5.setTextFormat(QtCore.Qt.AutoText)
+        self.label_5.setObjectName("label_5")
+        self.label_6 = QtWidgets.QLabel(self.frame_click_counter)
+        self.label_6.setGeometry(QtCore.QRect(380, 130, 211, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(0, 0, 601, 60))
+        font = QtGui.QFont()
+        font.setPointSize(30)
+        font.setBold(True)
+        font.setWeight(75)
+        font.setKerning(True)
+        self.label.setFont(font)
+        self.label.setToolTipDuration(-1)
+        self.label.setStyleSheet("background-color: rgb(52, 61, 54);\n"
+"color: rgb(79, 103, 81);\n"
+"")
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        MainWindow.setCentralWidget(self.centralwidget)
+        #self.menubar = QtWidgets.QMenuBar(MainWindow)
+        #self.menubar.setGeometry(QtCore.QRect(0, 0, 600, 21))
+        #self.menubar.setObjectName("menubar")
+        #MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setAccessibleName("")
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        self.label_2.setText(_translate("MainWindow", "Just count stuff"))
+        self.add.setText(_translate("MainWindow", "Add something to count"))
+        self.click.setText(_translate("MainWindow", "Activate Click Counter"))
+        self.reset.setText(_translate("MainWindow", "Reset"))
+        self.export_click.setText(_translate("MainWindow", "Export"))
+        self.label_3.setText(_translate("MainWindow", "LMB"))
+        self.label_4.setText(_translate("MainWindow", "RMB"))
+        self.cb_start_active.setText(_translate("MainWindow", "Start activated"))
+        self.cb_auto_start.setText(_translate("MainWindow", "Add to windows auto-run"))
+        self.cb_auto_export.setText(_translate("MainWindow", "Automatic Export"))
+        self.label_5.setText(_translate("MainWindow", "Click counter"))
+        self.label_6.setText(_translate("MainWindow", "temporary click count:"))
+        self.label.setText(_translate("MainWindow", "Stuff Counter"))
 
 class ClickCounterThread(QtCore.QThread):
     def __init__(self, master):
@@ -34,9 +355,9 @@ class ClickCounterThread(QtCore.QThread):
                 if left < 0:
                     self.master.click_count_l += 1
                     self.master.lcd_lmb.display(self.master.click_count_l)
-                    #if self.var_auto_export.get() == 1:
-                    #    self.click_count_l_temp += 1
-                    #    self.label_5.configure(text="temp.: " + str(self.click_count_l_temp) + " " + str(self.click_count_r_temp))
+                    if self.master.cb_auto_export.isChecked():
+                        self.master.click_count_l_temp += 1
+                        self.master.label_6.setText("temporary click count: "+ str(self.master.click_count_l_temp) + " " + str(self.master.click_count_r_temp))
                     self.master.store_click_count()
 
 
@@ -46,19 +367,39 @@ class ClickCounterThread(QtCore.QThread):
                 if right < 0:
                     self.master.click_count_r += 1
                     self.master.lcd_rmb.display(self.master.click_count_r)
-                    #if self.var_auto_export.get() == 1:
-                    #    self.click_count_r_temp += 1
-                    #    self.label_5.configure(text="temp.: " + str(self.click_count_l_temp) + " " + str(self.click_count_r_temp))
+                    if self.master.cb_auto_export.isChecked():
+                        self.master.click_count_r_temp += 1
+                        self.master.label_6.setText("temporary click count: "+ str(self.master.click_count_l_temp) + " " + str(self.master.click_count_r_temp))
                     self.master.store_click_count()
 
 
             time.sleep(0.04)
 
+class LogTimeThread(QtCore.QThread):
+    def __init__(self, master):
+        self.master = master
+        QtCore.QThread.__init__(self)
+
+    def run(self):
+
+        while self.master.cb_auto_export.isChecked():
+            now_datetime = datetime.now().isoformat(timespec='seconds')
+            file_time = open("timelog.txt", "w")
+            file_time.write(self.master.new_start_datetime + "\n" + now_datetime)
+            file_time.close()
+            self.master.auto_export(0)
+            print(now_datetime)
+
+            time.sleep(1)
 
 class CounterApp(Ui_MainWindow):
     def __init__(self, MainWindow):
+
         super().setupUi(MainWindow)
         super().retranslateUi(MainWindow)
+
+        #traySignal = "activated(QSystemTrayIcon::ActivationReason)"
+        #QtCore.QObject.connect(self.trayIcon, QtCore.SIGNAL(traySignal), self.__icon_activated)
 
         self.add.clicked.connect(self.add_profile_wrap)
         self.reset.clicked.connect(self.sure)
@@ -75,7 +416,6 @@ class CounterApp(Ui_MainWindow):
         self.lcd_lmb.display(self.click_count_l)
         self.lcd_rmb.display(self.click_count_r)
 
-
         #open profiles on startup
         file1 = open("profile_dict.txt","r")
         self.profile_dict = eval(file1.read())
@@ -86,27 +426,39 @@ class CounterApp(Ui_MainWindow):
             #self.add_frame(key)
         print(self.profiles)
 
-
         #creating frames for each counter profile
         for key in self.profile_dict.keys():
             self.add_frame(key)
 
         #open the state of checkboxes on startup
         self.cb_start_active.checkStateSet()
-
         file3 = open("state.txt","r")
         file3_list = eval(file3.read())
-    
-
         self.cb_start_active.setChecked(file3_list[0])
         self.cb_auto_start.setChecked(file3_list[1])
         self.cb_auto_export.setChecked(file3_list[2])
-
         self.cb_start_active.stateChanged.connect(self.set_start_active)
         self.cb_auto_start.stateChanged.connect(self.set_auto_start)
         self.cb_auto_export.stateChanged.connect(self.set_auto_export)
+        self.cb_auto_export.setEnabled(False)
 
 
+        USER_NAME = getpass.getuser()
+        self.file_dir = os.path.dirname(os.path.realpath(__file__))
+        self.file_path = self.file_dir + "\counter_2.exe"
+        self.bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % USER_NAME
+        #dealing with bugs:
+        if os.path.exists(self.bat_path + '\\' + "StuffCounter.bat") and not self.cb_auto_start.isChecked():
+            self.cb_auto_start.setChecked(True)
+        if not os.path.exists(self.bat_path + '\\' + "StuffCounter.bat") and self.cb_auto_start.isChecked():
+            self.cb_auto_start.setChecked(False)
+
+        self.start_active()
+
+    def start_active(self):
+        if self.cb_start_active.isChecked():
+            self.click_counter(True)
+            self.click.toggle()
 
     def set_start_active(self):
         file3 = open("state.txt","w")
@@ -118,21 +470,83 @@ class CounterApp(Ui_MainWindow):
         file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
         file3.close()
 
-    #if os.path.exists(self.bat_path + '\\' + "StuffCounter.bat") and self.var_auto_start.get()==0:
-    #    os.remove(self.bat_path + '\\' + "StuffCounter.bat")
-    #    return
+        if os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and self.cb_auto_start.isChecked()==False:
+            os.remove(self.bat_path + '\\' + "StuffCounter_qt.bat")
+            return
 
-    #with open(self.bat_path + '\\' + "StuffCounter.bat", "w+") as bat_file:
-    #    bat_file.write(r'set workingdir=%s' % self.file_dir + "\n" + r'pushd %workingdir%' + "\n" + r'start "" counter_2.exe')
+        with open(self.bat_path + '\\' + "StuffCounter_qt.bat", "w+") as bat_file:
+            bat_file.write(r'set workingdir=%s' % self.file_dir + "\n" + r'pushd %workingdir%' + "\n" + r'start "" counter_2.exe')
 
     def set_auto_export(self):
         file3 = open("state.txt","w")
         file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
         file3.close()
-    #self.label_5.configure(text="temp.: " + str(self.click_count_l_temp) + " " + str(self.click_count_r_temp))
-    #self.time_loop()
+        self.log_time()
 
+        if not self.cb_auto_export.isChecked():
+            #self.auto_export(0)
+            self.reset_click_counter_temp()
 
+    def log_time(self):
+        if self.cb_auto_export.isChecked():
+            self.auto_export(1)
+            self.new_start_datetime = datetime.now().isoformat(timespec='seconds')
+
+            self.log_time_thread = LogTimeThread(self)
+            self.log_time_thread.start()
+
+    def auto_export(self, index):
+        file_time2 = open("timelog.txt", "r")
+        time_list = file_time2.read().split("\n")
+        #time of starting the timelog:
+        start_datetime = datetime.now().isoformat(timespec='seconds')
+        start_date = start_datetime.split("T")[0]
+        start_time = start_datetime.split("T")[1]
+        start_hour = start_time.split(":")[0]
+        #time when the last timelog was finished:
+        last_end_datetime = time_list[index]
+        last_end_date = last_end_datetime.split("T")[0]
+        last_end_time = last_end_datetime.split("T")[1]
+        last_end_hour = last_end_time.split(":")[0]
+        print(start_hour)
+        print(last_end_hour)
+        #creating the automatic export csv file:
+        if start_hour != last_end_hour or start_date != last_end_date:
+            #creating new file with header if there is no file with this date yet:
+            if not os.path.exists(last_end_date + ".csv"):
+                exp_file = open((last_end_date + ".csv"),"a")
+                exp_file.write("hour; LMB; RMB")
+                #filling the hours before the last active hour with 0; 0: (!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!last_end_hour or start_hour!?!?!?!)
+                for i in range(int(last_end_hour)):
+                    exp_file.write("\n{0}; 0; 0".format(str(i)))
+                exp_file.close()
+            #appending another line with the click counts of the last active hour:
+            exp_file = open((last_end_date + ".csv"),"a")
+            exp_file.write("\n{0}; {1}; {2}".format(last_end_hour, str(self.click_count_l_temp), str(self.click_count_r_temp)))
+
+            #for the case that the last active hour is more than one hour ago, the inactive hours in between fill be added with 0; 0:
+            if last_end_date == start_date:
+                time_diff = int(start_hour) - int(last_end_hour)
+                for i in range(time_diff)[1:]:
+                    inactive_hours = int(last_end_hour) + i
+                    exp_file.write("\n{0}; 0; 0".format(str(inactive_hours)))
+            #in case one (or more) days have passed since the last active hour, the csv.file for the last active day will be filled up to hour 23 with 0; 0:
+            else:
+                time_diff = 24 - int(last_end_hour)
+                for i in range(time_diff)[1:]:
+                    inactive_hours = int(last_end_hour) + i
+                    exp_file.write("\n{0}; 0; 0".format(str(inactive_hours)))
+                #also a new file for today is being created with 0; 0 until the time right now (is if not os.path.exists(start_date + ".csv") actually necessary in this case???)
+                if not os.path.exists(start_date + ".csv"):
+                    exp_file_today = open((start_date + ".csv"),"a")
+                    exp_file_today.write("hour; LMB; RMB")
+                    for i in range(int(start_hour)):
+                        exp_file_today.write("\n{0}; 0; 0".format(str(i)))
+                    exp_file_today.close()
+
+            exp_file.close()
+            self.reset_click_counter_temp()
+            self.new_start_datetime = datetime.now().isoformat(timespec='seconds')
 
     def click_counter(self, activated):
         self.stop_loop = False
@@ -147,6 +561,9 @@ class CounterApp(Ui_MainWindow):
     "border-color: rgb(125, 45, 76);}\n"
     "QPushButton:pressed {border-style: solid; background-color:  rgb(125, 45, 76)}")
             self.statusbar.showMessage("All your clicks are being counted")
+            self.cb_auto_export.setEnabled(True)
+            if self.cb_auto_export.isChecked():
+                self.log_time()
 
         else:
 
@@ -162,26 +579,29 @@ class CounterApp(Ui_MainWindow):
             self.click_count_l -= 1
             self.lcd_lmb.display(self.click_count_l)
             self.store_click_count()
+            self.cb_auto_export.setChecked(False)
+            file3 = open("state.txt","w")
+            file3.write(str([self.cb_start_active.isChecked(), self.cb_auto_start.isChecked(), self.cb_auto_export.isChecked()]))
+            file3.close()
+            self.cb_auto_export.setEnabled(False)
             self.stop_loop = True
 
         self.clickcounter_thread = ClickCounterThread(self)
         self.clickcounter_thread.start()
 
-    #    def stop_click_counter():
-    #        self.stop_loop
-    #        self.stop_loop = True
-            #self.var_auto_export.set(0)
-            #file3 = open("state.txt","w")
-            #file3.write(str(self.var_start_active.get()) + str(self.var_auto_start.get()) + str(self.var_auto_export.get()))
-            #file3.close()
-            #self.cb_auto_export.configure(state=DISABLED)
 
     def reset_click_counter(self):
         self.click_count_l = 0
         self.click_count_r = 0
         self.lcd_lmb.display(self.click_count_l)
         self.lcd_rmb.display(self.click_count_r)
-        #self.reset_click_counter_temp()
+        self.reset_click_counter_temp()
+
+    def reset_click_counter_temp(self):
+        self.click_count_l_temp = 0
+        self.click_count_r_temp = 0
+        self.label_6.setText("temporary click count: "+ str(self.click_count_l_temp) + " " + str(self.click_count_r_temp))
+        self.store_click_count()
 
     def click_export(self):
 
@@ -273,14 +693,6 @@ class CounterApp(Ui_MainWindow):
 
         Export_Dialog.show()
         Export_Dialog.exec()
-
-        #var_format = StringVar()
-        #var_format.set(".txt")
-        #ok_button = Button(export, text="OK", command = ok)
-        #ok_button.pack(pady=5, padx=5,side=RIGHT)
-        #export_dropdown = OptionMenu(export, var_format, ".txt", ".csv")
-        #export_dropdown.configure(width = 5)
-        #export_dropdown.pack(pady=5, padx=5,side=RIGHT)
 
     def store_click_count(self):
         file2 = open("click_count.txt","w")
@@ -436,13 +848,11 @@ class CounterApp(Ui_MainWindow):
 
 
 
-
-
 app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
+MainWindow = Mainwindow_changed()
 main_window = CounterApp(MainWindow)
-#main_window.setupUi(MainWindow)
 MainWindow.show()
+#main_window.trayIcon.show()
 MainWindow.setWindowTitle("Stuff Counter")
 
 
