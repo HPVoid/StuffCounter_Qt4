@@ -4,7 +4,7 @@ from PyQt5.QtGui import QIcon, QFont
 import sys
 from counter_main_window import Ui_MainWindow, MyEntry, Mainwindow_changed
 from counterprofile1 import CounterProfile
-from profile_frame_qt import ProfileFrame
+from profile_frame_qt4 import ProfileFrame
 import win32api
 from datetime import datetime
 import time
@@ -69,7 +69,11 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.setObjectName("MainWindow")
             self.setWindowModality(QtCore.Qt.NonModal)
             self.resize(776, 584)
-            self.setStyleSheet("background-color: rgb(52, 61, 54);")
+            self.setStyleSheet("background-color: rgb(29, 67, 88);\n"
+    "border-color:rgb(30, 121, 177);\n"
+    "color:rgb(30, 121, 177);\n"
+    "\n"
+    "")
             self.centralwidget = QtWidgets.QWidget(self)
             self.centralwidget.setObjectName("centralwidget")
 
@@ -91,11 +95,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font.setWeight(75)
             font.setKerning(True)
             self.label.setFont(font)
-            self.label.setToolTipDuration(-1)
-            self.label.setAccessibleName("")
-            self.label.setStyleSheet("background-color: rgb(52, 61, 54);\n"
-    "color: rgb(79, 103, 81);\n"
-    "")
+
             self.label.setAlignment(QtCore.Qt.AlignCenter)
             self.label.setObjectName("label")
             self.verticalLayout_main_window.addWidget(self.label)
@@ -105,10 +105,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(self.frame_just_count.sizePolicy().hasHeightForWidth())
             self.frame_just_count.setSizePolicy(sizePolicy)
-            self.frame_just_count.setAccessibleName("")
             self.frame_just_count.setAutoFillBackground(False)
-            self.frame_just_count.setStyleSheet("border-color: rgb(79, 103, 81);\n"
-    "border-style: solid;\n"
+            self.frame_just_count.setStyleSheet("border-style: solid;\n"
     "border-width: 2px;\n"
     "border-radius: 10px;")
             self.frame_just_count.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -132,48 +130,26 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font.setBold(False)
             font.setWeight(50)
             self.label_2.setFont(font)
-            self.label_2.setAccessibleName("")
-            self.label_2.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
+            self.label_2.setStyleSheet("border-width: 0px;\n")
             self.label_2.setTextFormat(QtCore.Qt.AutoText)
             self.label_2.setObjectName("label_2")
             self.verticalLayout_just_count.addWidget(self.label_2)
 
-            #####
-            self.verticalLayoutWidget = QtWidgets.QWidget(self.frame_just_count)
-            self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 29, 581, 101))
-            self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-            self.verticalLayoutWidget.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
-            self.box_layout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-            self.box_layout.setContentsMargins(0, 0, 0, 0)
-            self.box_layout.setObjectName("box_layout")
-
-
             self.scroll = QtWidgets.QScrollArea()
             self.scroll.setWidgetResizable(True)
-            self.scroll.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
+            self.scroll.setStyleSheet("border-width: 0px;\n")
 
             self.group_box = QtWidgets.QGroupBox()
+            self.group_box.setStyleSheet("border-width: 0px;\n")
             self.form_layout = QtWidgets.QFormLayout()
             self.group_box.setLayout(self.form_layout)
-            self.box_layout.addWidget(self.scroll)
-            #####
 
+
+            self.verticalLayout_just_count.addWidget(self.group_box)
             self.verticalLayout_just_count.addWidget(self.scroll)
+
+
+
             self.horizontalLayout_add_entry = QtWidgets.QHBoxLayout()
             self.horizontalLayout_add_entry.setSpacing(10)
             self.horizontalLayout_add_entry.setObjectName("horizontalLayout_add_entry")
@@ -187,16 +163,13 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font = QtGui.QFont()
             font.setPointSize(9)
             self.add.setFont(font)
-            self.add.setStatusTip("")
-            self.add.setWhatsThis("")
-            self.add.setAccessibleName("")
-            self.add.setAccessibleDescription("")
-            self.add.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+            self.add.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
     "border-style: outset;\n"
     "border-width: 1px;\n"
     "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+    "border-color: rgb(41, 96, 125);\n"
+    "color:rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
             self.add.setDefault(True)
             self.add.setObjectName("add")
             self.horizontalLayout_add_entry.addWidget(self.add)
@@ -213,31 +186,25 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font.setBold(False)
             font.setWeight(50)
             self.entry.setFont(font)
-            self.entry.setAccessibleName("")
-            self.entry.setStyleSheet("background-color:rgb(0, 0, 0);\n"
-    "color: rgb(79, 103, 81);")
+            self.entry.setStyleSheet("background-color:rgb(0, 0, 0)")
             self.entry.setLineWidth(1)
             self.entry.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
             self.entry.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
             self.entry.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
-            self.entry.setPlaceholderText("")
             self.entry.setObjectName("entry")
             self.horizontalLayout_add_entry.addWidget(self.entry)
             self.verticalLayout_just_count.addLayout(self.horizontalLayout_add_entry)
             self.verticalLayout_main_window.addWidget(self.frame_just_count)
 
             self.frame_click_counter = QtWidgets.QFrame(self.centralwidget)
-            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(self.frame_click_counter.sizePolicy().hasHeightForWidth())
             self.frame_click_counter.setSizePolicy(sizePolicy)
-            self.frame_click_counter.setMinimumSize(QtCore.QSize(621, 210))
-            self.frame_click_counter.setMaximumSize(QtCore.QSize(16777215, 200))
-            self.frame_click_counter.setAccessibleName("")
-            self.frame_click_counter.setStyleSheet("\n"
-    "border-color:rgb(79, 103, 81);\n"
-    "border-style: solid;\n"
+            self.frame_click_counter.setMinimumSize(QtCore.QSize(0, 0))
+            self.frame_click_counter.setMaximumSize(QtCore.QSize(16777215, 220))
+            self.frame_click_counter.setStyleSheet("border-style: solid;\n"
     "border-width: 2px;\n"
     "border-radius: 10px;")
             self.frame_click_counter.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -248,37 +215,41 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.gridLayout_click_counter.setContentsMargins(10, 10, 10, 10)
             self.gridLayout_click_counter.setSpacing(10)
             self.gridLayout_click_counter.setObjectName("gridLayout_click_counter")
-            self.click = QtWidgets.QPushButton(self.frame_click_counter)
-            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+            self.cb_start_active = QtWidgets.QCheckBox(self.frame_click_counter)
+            self.cb_start_active.setMinimumSize(QtCore.QSize(0, 20))
+            font = QtGui.QFont()
+            font.setPointSize(9)
+            self.cb_start_active.setFont(font)
+            self.cb_start_active.setAccessibleName("")
+            self.cb_start_active.setStyleSheet("border-width: 0px;\n"
+        "color: rgb(0, 0, 0)")
+            self.cb_start_active.setObjectName("cb_start_active")
+            self.gridLayout_click_counter.addWidget(self.cb_start_active, 4, 0, 1, 1)
+            self.cb_hide = QtWidgets.QCheckBox(self.frame_click_counter)
+            self.cb_hide.setMinimumSize(QtCore.QSize(0, 20))
+            font = QtGui.QFont()
+            font.setPointSize(9)
+            self.cb_hide.setFont(font)
+            self.cb_hide.setAccessibleName("")
+            self.cb_hide.setStyleSheet("border-width: 0px;\n"
+        "color: rgb(0, 0, 0)")
+            self.cb_hide.setObjectName("cb_hide")
+            self.gridLayout_click_counter.addWidget(self.cb_hide, 6, 0, 1, 1)
+            self.label_6 = QtWidgets.QLabel(self.frame_click_counter)
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.click.sizePolicy().hasHeightForWidth())
-            self.click.setSizePolicy(sizePolicy)
-            self.click.setMinimumSize(QtCore.QSize(160, 31))
+            sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
+            self.label_6.setSizePolicy(sizePolicy)
+            self.label_6.setMinimumSize(QtCore.QSize(0, 20))
             font = QtGui.QFont()
             font.setPointSize(9)
-            self.click.setFont(font)
-            self.click.setAccessibleName("")
-            self.click.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-            self.click.setCheckable(True)
-            self.click.setObjectName("click")
-            self.gridLayout_click_counter.addWidget(self.click, 1, 0, 1, 1)
-            self.cb_auto_export = QtWidgets.QCheckBox(self.frame_click_counter)
-            self.cb_auto_export.setMinimumSize(QtCore.QSize(0, 20))
-            font = QtGui.QFont()
-            font.setPointSize(9)
-            self.cb_auto_export.setFont(font)
-            self.cb_auto_export.setToolTip("This will export the hourly mouseclicks to a csv-file in your counter directory.")
-            self.cb_auto_export.setAccessibleName("")
-            self.cb_auto_export.setStyleSheet("border-width: 0px;\n"
-    "")
-            self.cb_auto_export.setObjectName("cb_auto_export")
-            self.gridLayout_click_counter.addWidget(self.cb_auto_export, 6, 0, 1, 1)
+            self.label_6.setFont(font)
+            self.label_6.setStyleSheet("border-width: 0px;\n")
+            self.label_6.setFrameShape(QtWidgets.QFrame.HLine)
+            self.label_6.setLineWidth(0)
+            self.label_6.setObjectName("label_6")
+            self.gridLayout_click_counter.addWidget(self.label_6, 7, 4, 1, 2)
             self.export_click = QtWidgets.QPushButton(self.frame_click_counter)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
@@ -289,66 +260,27 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font = QtGui.QFont()
             font.setPointSize(9)
             self.export_click.setFont(font)
-            self.export_click.setAccessibleName("")
-            self.export_click.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+            self.export_click.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
     "border-style: outset;\n"
-    "border-width: 2px;\n"
+    "border-width: 1px;\n"
     "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+    "border-color: rgb(41, 96, 125);\n"
+    "color:rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
             self.export_click.setObjectName("export_click")
             self.gridLayout_click_counter.addWidget(self.export_click, 1, 2, 1, 1)
-            self.label_5 = QtWidgets.QLabel(self.frame_click_counter)
-            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
-            self.label_5.setSizePolicy(sizePolicy)
-            font = QtGui.QFont()
-            font.setPointSize(11)
-            font.setBold(False)
-            font.setWeight(50)
-            self.label_5.setFont(font)
-            self.label_5.setAccessibleName("")
-            self.label_5.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
-            self.label_5.setTextFormat(QtCore.Qt.AutoText)
-            self.label_5.setObjectName("label_5")
-            self.gridLayout_click_counter.addWidget(self.label_5, 0, 0, 1, 1)
-            self.cb_hide = QtWidgets.QCheckBox(self.frame_click_counter)
-            self.cb_hide.setMinimumSize(QtCore.QSize(0, 20))
+            self.cb_auto_export = QtWidgets.QCheckBox(self.frame_click_counter)
+            self.cb_auto_export.setMinimumSize(QtCore.QSize(0, 20))
             font = QtGui.QFont()
             font.setPointSize(9)
-            self.cb_hide.setFont(font)
-            self.cb_hide.setAccessibleName("")
-            self.cb_hide.setStyleSheet("border-width: 0px;\n"
-    "")
-            self.cb_hide.setObjectName("cb_hide")
-            self.gridLayout_click_counter.addWidget(self.cb_hide, 5, 0, 1, 1)
-            self.cb_auto_start = QtWidgets.QCheckBox(self.frame_click_counter)
-            self.cb_auto_start.setMinimumSize(QtCore.QSize(0, 20))
-            font = QtGui.QFont()
-            font.setPointSize(9)
-            self.cb_auto_start.setFont(font)
-            self.cb_auto_start.setAccessibleName("")
-            self.cb_auto_start.setStyleSheet("border-width: 0px;\n"
-    "")
-            self.cb_auto_start.setObjectName("cb_auto_run")
-            self.gridLayout_click_counter.addWidget(self.cb_auto_start, 4, 0, 1, 1)
-            self.cb_start_active = QtWidgets.QCheckBox(self.frame_click_counter)
-            self.cb_start_active.setMinimumSize(QtCore.QSize(0, 20))
-            font = QtGui.QFont()
-            font.setPointSize(9)
-            self.cb_start_active.setFont(font)
-            self.cb_start_active.setAccessibleName("")
-            self.cb_start_active.setStyleSheet("border-width: 0px;\n"
-    "")
-            self.cb_start_active.setObjectName("cb_start_active")
-            self.gridLayout_click_counter.addWidget(self.cb_start_active, 3, 0, 1, 1)
+            self.cb_auto_export.setFont(font)
+            self.cb_auto_export.setToolTip("This will export the hourly mouseclicks to a csv-file in your counter directory.")
+            self.cb_auto_export.setStyleSheet("border-width: 0px;\n"
+    "color: rgb(0, 0, 0)")
+            self.cb_auto_export.setObjectName("cb_auto_export")
+            self.gridLayout_click_counter.addWidget(self.cb_auto_export, 7, 0, 1, 1)
+            spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+            self.gridLayout_click_counter.addItem(spacerItem, 1, 3, 1, 1)
             self.reset = QtWidgets.QPushButton(self.frame_click_counter)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
@@ -359,56 +291,35 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font = QtGui.QFont()
             font.setPointSize(9)
             self.reset.setFont(font)
-            self.reset.setAccessibleName("")
-            self.reset.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+            self.reset.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
     "border-style: outset;\n"
-    "border-width: 2px;\n"
+    "border-width: 1px;\n"
     "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+    "border-color: rgb(41, 96, 125);\n"
+    "color:rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
             self.reset.setObjectName("reset")
             self.gridLayout_click_counter.addWidget(self.reset, 1, 1, 1, 1)
-            spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            self.gridLayout_click_counter.addItem(spacerItem, 1, 3, 1, 1)
-
-            self.frame_lmb = QtWidgets.QFrame(self.frame_click_counter)
+            self.click = QtWidgets.QPushButton(self.frame_click_counter)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.frame_lmb.sizePolicy().hasHeightForWidth())
-            self.frame_lmb.setSizePolicy(sizePolicy)
-            self.frame_lmb.setMinimumSize(QtCore.QSize(111, 81))
-            self.frame_lmb.setAccessibleName("")
-            self.frame_lmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
-            self.frame_lmb.setFrameShadow(QtWidgets.QFrame.Raised)
-            self.frame_lmb.setObjectName("frame_lmb")
-            self.verticalLayout_lmb = QtWidgets.QVBoxLayout(self.frame_lmb)
-            self.verticalLayout_lmb.setContentsMargins(10, 10, 10, 10)
-            self.verticalLayout_lmb.setSpacing(5)
-            self.verticalLayout_lmb.setObjectName("verticalLayout_lmb")
-            self.label_3 = QtWidgets.QLabel(self.frame_lmb)
+            sizePolicy.setHeightForWidth(self.click.sizePolicy().hasHeightForWidth())
+            self.click.setSizePolicy(sizePolicy)
+            self.click.setMinimumSize(QtCore.QSize(160, 31))
             font = QtGui.QFont()
-            font.setPointSize(11)
-            font.setBold(True)
-            font.setWeight(75)
-            self.label_3.setFont(font)
-            self.label_3.setAccessibleName("")
-            self.label_3.setStyleSheet("border-width: 0px;\n"
-    "border-radius: 0px;")
-            self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-            self.label_3.setObjectName("label_3")
-            self.verticalLayout_lmb.addWidget(self.label_3)
-            self.lcd_lmb = QtWidgets.QLCDNumber(self.frame_lmb)
-            self.lcd_lmb.setAccessibleName("")
-            self.lcd_lmb.setStyleSheet("border-radius: 5px;\n"
-    "gridline-color: rgb(0, 85, 0);\n"
-    "color: rgb(170, 0, 0);\n"
-    "background-color: rgb(0, 0, 0);")
-            self.lcd_lmb.setDigitCount(6)
-            self.lcd_lmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
-            self.lcd_lmb.setObjectName("lcd_lmb")
-            self.verticalLayout_lmb.addWidget(self.lcd_lmb)
-            self.gridLayout_click_counter.addWidget(self.frame_lmb, 0, 4, 1, 1)
+            font.setPointSize(9)
+            self.click.setFont(font)
+            self.click.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+    "border-style: outset;\n"
+    "border-width: 1px;\n"
+    "border-radius: 10px;\n"
+    "border-color: rgb(41, 96, 125);\n"
+    "color:rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+            self.click.setCheckable(True)
+            self.click.setObjectName("click")
+            self.gridLayout_click_counter.addWidget(self.click, 1, 0, 1, 1)
             self.frame_rmb = QtWidgets.QFrame(self.frame_click_counter)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
@@ -416,7 +327,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             sizePolicy.setHeightForWidth(self.frame_rmb.sizePolicy().hasHeightForWidth())
             self.frame_rmb.setSizePolicy(sizePolicy)
             self.frame_rmb.setMinimumSize(QtCore.QSize(111, 81))
-            self.frame_rmb.setAccessibleName("")
             self.frame_rmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.frame_rmb.setFrameShadow(QtWidgets.QFrame.Raised)
             self.frame_rmb.setObjectName("frame_rmb")
@@ -431,17 +341,16 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             font.setWeight(75)
             self.label_4.setFont(font)
             self.label_4.setAccessibleName("")
-            self.label_4.setStyleSheet("border-width: 0px;\n"
-    "border-radius: 0px;")
+            self.label_4.setStyleSheet("border-width: 0px;")
             self.label_4.setAlignment(QtCore.Qt.AlignCenter)
             self.label_4.setObjectName("label_4")
             self.verticalLayout_rmb.addWidget(self.label_4)
             self.lcd_rmb = QtWidgets.QLCDNumber(self.frame_rmb)
-            self.lcd_rmb.setAccessibleName("")
             self.lcd_rmb.setStyleSheet("border-radius: 5px;\n"
     "gridline-color: rgb(0, 85, 0);\n"
     "color: rgb(170, 0, 0);\n"
-    "background-color: rgb(0, 0, 0);")
+    "background-color: rgb(0, 0, 0);\n"
+    "border-color:rgb(41, 96, 125)")
             self.lcd_rmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.lcd_rmb.setSmallDecimalPoint(False)
             self.lcd_rmb.setDigitCount(6)
@@ -450,31 +359,75 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.lcd_rmb.setObjectName("lcd_rmb")
             self.verticalLayout_rmb.addWidget(self.lcd_rmb)
             self.gridLayout_click_counter.addWidget(self.frame_rmb, 0, 5, 1, 1)
-            self.label_6 = QtWidgets.QLabel(self.frame_click_counter)
-            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.label_6.sizePolicy().hasHeightForWidth())
-            self.label_6.setSizePolicy(sizePolicy)
-            self.label_6.setMinimumSize(QtCore.QSize(0, 20))
+            self.cb_auto_start = QtWidgets.QCheckBox(self.frame_click_counter)
+            self.cb_auto_start.setMinimumSize(QtCore.QSize(0, 20))
             font = QtGui.QFont()
             font.setPointSize(9)
-            self.label_6.setFont(font)
-            self.label_6.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
-            self.label_6.setFrameShape(QtWidgets.QFrame.HLine)
-            self.label_6.setLineWidth(0)
-            self.label_6.setObjectName("label_6")
-            self.gridLayout_click_counter.addWidget(self.label_6, 6, 4, 1, 2)
+            self.cb_auto_start.setFont(font)
+            self.cb_auto_start.setAccessibleName("")
+            self.cb_auto_start.setStyleSheet("border-width: 0px;\n"
+    "color: rgb(0, 0, 0)")
+            self.cb_auto_start.setObjectName("cb_auto_start")
+            self.gridLayout_click_counter.addWidget(self.cb_auto_start, 5, 0, 1, 1)
+            self.label_5 = QtWidgets.QLabel(self.frame_click_counter)
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+            sizePolicy.setHorizontalStretch(0)
+            sizePolicy.setVerticalStretch(0)
+            sizePolicy.setHeightForWidth(self.label_5.sizePolicy().hasHeightForWidth())
+            self.label_5.setSizePolicy(sizePolicy)
+            font = QtGui.QFont()
+            font.setPointSize(11)
+            font.setBold(False)
+            font.setWeight(50)
+            self.label_5.setFont(font)
+            self.label_5.setStyleSheet("border-width: 0px;")
+            self.label_5.setTextFormat(QtCore.Qt.AutoText)
+            self.label_5.setObjectName("label_5")
+            self.gridLayout_click_counter.addWidget(self.label_5, 0, 0, 1, 1)
+            spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+            self.gridLayout_click_counter.addItem(spacerItem1, 3, 0, 1, 1)
+            self.frame_lmb = QtWidgets.QFrame(self.frame_click_counter)
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+            sizePolicy.setHorizontalStretch(0)
+            sizePolicy.setVerticalStretch(0)
+            sizePolicy.setHeightForWidth(self.frame_lmb.sizePolicy().hasHeightForWidth())
+            self.frame_lmb.setSizePolicy(sizePolicy)
+            self.frame_lmb.setMinimumSize(QtCore.QSize(111, 81))
+            self.frame_lmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            self.frame_lmb.setFrameShadow(QtWidgets.QFrame.Raised)
+            self.frame_lmb.setObjectName("frame_lmb")
+            self.verticalLayout_lmb = QtWidgets.QVBoxLayout(self.frame_lmb)
+            self.verticalLayout_lmb.setContentsMargins(10, 10, 10, 10)
+            self.verticalLayout_lmb.setSpacing(5)
+            self.verticalLayout_lmb.setObjectName("verticalLayout_lmb")
+            self.label_3 = QtWidgets.QLabel(self.frame_lmb)
+            font = QtGui.QFont()
+            font.setPointSize(11)
+            font.setBold(True)
+            font.setWeight(75)
+            self.label_3.setFont(font)
+            self.label_3.setStyleSheet("border-width: 0px;")
+            self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+            self.label_3.setObjectName("label_3")
+            self.verticalLayout_lmb.addWidget(self.label_3)
+            self.lcd_lmb = QtWidgets.QLCDNumber(self.frame_lmb)
+            self.lcd_lmb.setAccessibleName("")
+            self.lcd_lmb.setStyleSheet("border-radius: 5px;\n"
+    "gridline-color: rgb(0, 85, 0);\n"
+    "color: rgb(170, 0, 0);\n"
+    "background-color: rgb(0, 0, 0);\n"
+    "border-color:rgb(41, 96, 125)")
+            self.lcd_lmb.setDigitCount(6)
+            self.lcd_lmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
+            self.lcd_lmb.setObjectName("lcd_lmb")
+            self.verticalLayout_lmb.addWidget(self.lcd_lmb)
+            self.gridLayout_click_counter.addWidget(self.frame_lmb, 0, 4, 3, 1)
             self.verticalLayout_main_window.addWidget(self.frame_click_counter)
             self.setCentralWidget(self.centralwidget)
             self.menubar = QtWidgets.QMenuBar(self)
             self.menubar.setGeometry(QtCore.QRect(0, 0, 776, 21))
             self.menubar.setObjectName("menubar")
+            self.menubar.setStyleSheet("color: rgb(0,0,0)")
             self.setMenuBar(self.menubar)
             action_app = self.menubar.addMenu("Options")
             action_app.addAction("Info")
@@ -608,8 +561,13 @@ class CounterApp(Ui_MainWindow):
         file3_list = eval(file3.read())
         self.cb_start_active.setChecked(file3_list[0])
         self.cb_auto_start.setChecked(file3_list[1])
-        self.cb_auto_export.setChecked(file3_list[2])
+        if file3_list[0]:
+            self.cb_auto_export.setChecked(file3_list[2])
+        else:
+            self.cb_auto_export.setChecked(False)
+
         self.cb_hide.setChecked(file3_list[3])
+
         self.cb_start_active.stateChanged.connect(self.set_start_active)
         self.cb_auto_start.stateChanged.connect(self.set_auto_start)
         self.cb_auto_export.stateChanged.connect(self.set_auto_export)
@@ -662,7 +620,6 @@ class CounterApp(Ui_MainWindow):
         self.log_time()
 
         if not self.cb_auto_export.isChecked():
-            #self.auto_export(0)
             self.reset_click_counter_temp()
 
     def log_time(self):
@@ -674,6 +631,10 @@ class CounterApp(Ui_MainWindow):
             self.log_time_thread.start()
 
     def auto_export(self, index):
+        if not os.path.exists("timelog.txt"):
+            file_time2 = open("timelog.txt", "w")
+            file_time2.write(datetime.now().isoformat(timespec='seconds') + "\n" + datetime.now().isoformat(timespec='seconds'))
+            file_time2.close()
         file_time2 = open("timelog.txt", "r")
         time_list = file_time2.read().split("\n")
         #time of starting the timelog:
@@ -694,7 +655,6 @@ class CounterApp(Ui_MainWindow):
             if not os.path.exists(last_end_date + ".csv"):
                 exp_file = open((last_end_date + ".csv"),"a")
                 exp_file.write("hour; LMB; RMB")
-                #filling the hours before the last active hour with 0; 0: (!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!last_end_hour or start_hour!?!?!?!)
                 for i in range(int(last_end_hour)):
                     exp_file.write("\n{0}; 0; 0".format(str(i)))
                 exp_file.close()
@@ -736,8 +696,8 @@ class CounterApp(Ui_MainWindow):
     "border-style: outset;\n"
     "border-width: 1px;\n"
     "border-radius: 10px;\n"
-    "border-color: rgb(125, 45, 76);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(125, 45, 76)}")
+    "border-color: rgb(125, 45, 76); color: rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(125, 45, 76), color: rgb(0, 0, 0)}")
             self.statusbar.showMessage("All your clicks are being counted")
             self.cb_auto_export.setEnabled(True)
             if self.cb_auto_export.isChecked():
@@ -747,12 +707,13 @@ class CounterApp(Ui_MainWindow):
 
             print("deactivated!!!")
             self.click.setText("Activate Click Counter")
-            self.click.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
+            self.click.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
     "border-style: outset;\n"
     "border-width: 1px;\n"
     "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
+    "border-color: rgb(41, 96, 125);\n"
+    "color:rgb(0, 0, 0)}\n"
+    "QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
             self.statusbar.showMessage("")
             self.click_count_l -= 1
             self.lcd_lmb.display(self.click_count_l)
@@ -852,11 +813,8 @@ class CounterApp(Ui_MainWindow):
         font.setWeight(75)
         export_text.setFont(font)
         export_text.setStyleSheet("color: rgb(79, 103, 81);\n"
-    "border-style: flat;\n"
-    "border-width: 0px;\n"
-    "border-radius: 0px;\n"
-    "border-width: 0px;\n"
-    "")
+    "border-width: 0px;\n")
+
         export_text.setText("Filename:")
 
         self.export_entry = MyEntry(parent=self.Export_Dialog, master=self, function=self.click_export_ok)
@@ -899,13 +857,10 @@ class CounterApp(Ui_MainWindow):
         export_button.clicked.connect(self.click_export_ok)
         export_button.clicked.connect(self.Export_Dialog.close)
 
-
         export_layout.addWidget(export_text)
         export_layout.addWidget(self.export_entry)
         export_layout.addWidget(self.dropdown)
         export_layout.addWidget(export_button)
-
-
 
         self.Export_Dialog.show()
         self.Export_Dialog.exec()
@@ -966,40 +921,43 @@ class CounterApp(Ui_MainWindow):
         self.file.close()
 
     def sure(self):
-        Sure_Dialog = QtWidgets.QDialog()
+        Sure_Dialog = QtWidgets.QDialog(self.centralwidget)
         Sure_Dialog.resize(400, 126)
-        Sure_Dialog.setStyleSheet("background-color: rgb(52, 61, 54);")
 
-        botton_ok = QtWidgets.QPushButton(Sure_Dialog)
-        botton_ok.setGeometry(QtCore.QRect(40, 70, 151, 31))
+        verticalLayout = QtWidgets.QVBoxLayout(Sure_Dialog)
+        horizontalLayout = QtWidgets.QHBoxLayout(Sure_Dialog)
+
+        button_ok = QtWidgets.QPushButton(Sure_Dialog)
         font = QtGui.QFont()
         font.setPointSize(9)
-        botton_ok.setFont(font)
-        botton_ok.setText("Yes")
-        botton_ok.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-        botton_ok.clicked.connect(self.reset_click_counter)
-        botton_ok.clicked.connect(Sure_Dialog.close)
+        button_ok.setFont(font)
+        button_ok.setFixedSize(80, 31)
+        button_ok.setText("Yes")
+        button_ok.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(41, 96, 125);\n"
+"color:rgb(0, 0, 0)}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+        button_ok.clicked.connect(self.reset_all)
+        button_ok.clicked.connect(Sure_Dialog.close)
 
-        botton_no = QtWidgets.QPushButton(Sure_Dialog)
-        botton_no.setGeometry(QtCore.QRect(200, 70, 151, 31))
+        button_no = QtWidgets.QPushButton(Sure_Dialog)
         font = QtGui.QFont()
         font.setPointSize(9)
-        botton_no.setFont(font)
-        botton_no.setText("No")
-        botton_no.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-        botton_no.setDefault(True)
-        botton_no.clicked.connect(Sure_Dialog.close)
+        button_no.setFont(font)
+        button_no.setFixedSize(80, 31)
+        button_no.setText("No")
+        button_no.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(41, 96, 125);\n"
+"color:rgb(0, 0, 0)}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+        button_no.setDefault(True)
+        button_no.clicked.connect(Sure_Dialog.close)
 
         sure_text = QtWidgets.QLabel(Sure_Dialog)
         sure_text.setGeometry(QtCore.QRect(0, 0, 400, 70))
@@ -1008,54 +966,57 @@ class CounterApp(Ui_MainWindow):
         font.setBold(True)
         font.setWeight(75)
         sure_text.setFont(font)
-        sure_text.setStyleSheet("color: rgb(79, 103, 81);\n"
-        "border-style: flat;\n"
-        "border-width: 0px;\n"
-        "border-radius: 0px;\n"
-        "border-width: 0px;\n"
-        "")
+        sure_text.setStyleSheet("border-width: 0px;\n")
         sure_text.setAlignment(QtCore.Qt.AlignCenter)
-        sure_text.setText("Are you sure you want to reset the counter?")
+        sure_text.setText("Are you sure you want to reset the click counter?")
 
+        verticalLayout.addWidget(sure_text)
+        verticalLayout.addLayout(horizontalLayout)
+        horizontalLayout.addWidget(button_ok)
+        horizontalLayout.addWidget(button_no)
+        horizontalLayout.setAlignment(Qt.AlignCenter)
+        Sure_Dialog.setWindowTitle("Sure?")
 
         Sure_Dialog.show()
-        Sure_Dialog.exec()
 
     def sure_2(self):
-        Sure_Dialog = QtWidgets.QDialog()
+        Sure_Dialog = QtWidgets.QDialog(self.centralwidget)
         Sure_Dialog.resize(400, 126)
-        Sure_Dialog.setStyleSheet("background-color: rgb(52, 61, 54);")
 
-        botton_ok = QtWidgets.QPushButton(Sure_Dialog)
-        botton_ok.setGeometry(QtCore.QRect(40, 70, 151, 31))
+        verticalLayout = QtWidgets.QVBoxLayout(Sure_Dialog)
+        horizontalLayout = QtWidgets.QHBoxLayout(Sure_Dialog)
+
+        button_ok = QtWidgets.QPushButton(Sure_Dialog)
         font = QtGui.QFont()
         font.setPointSize(9)
-        botton_ok.setFont(font)
-        botton_ok.setText("Yes")
-        botton_ok.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-        botton_ok.clicked.connect(self.reset_all)
-        botton_ok.clicked.connect(Sure_Dialog.close)
+        button_ok.setFont(font)
+        button_ok.setFixedSize(80, 31)
+        button_ok.setText("Yes")
+        button_ok.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(41, 96, 125);\n"
+"color:rgb(0, 0, 0)}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+        button_ok.clicked.connect(self.reset_all)
+        button_ok.clicked.connect(Sure_Dialog.close)
 
-        botton_no = QtWidgets.QPushButton(Sure_Dialog)
-        botton_no.setGeometry(QtCore.QRect(200, 70, 151, 31))
+        button_no = QtWidgets.QPushButton(Sure_Dialog)
         font = QtGui.QFont()
         font.setPointSize(9)
-        botton_no.setFont(font)
-        botton_no.setText("No")
-        botton_no.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-        botton_no.setDefault(True)
-        botton_no.clicked.connect(Sure_Dialog.close)
+        button_no.setFont(font)
+        button_no.setFixedSize(80, 31)
+        button_no.setText("No")
+        button_no.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(41, 96, 125);\n"
+"color:rgb(0, 0, 0)}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+        button_no.setDefault(True)
+        button_no.clicked.connect(Sure_Dialog.close)
 
         sure_text = QtWidgets.QLabel(Sure_Dialog)
         sure_text.setGeometry(QtCore.QRect(0, 0, 400, 70))
@@ -1064,64 +1025,68 @@ class CounterApp(Ui_MainWindow):
         font.setBold(True)
         font.setWeight(75)
         sure_text.setFont(font)
-        sure_text.setStyleSheet("color: rgb(79, 103, 81);\n"
-        "border-style: flat;\n"
-        "border-width: 0px;\n"
-        "border-radius: 0px;\n"
-        "border-width: 0px;\n"
-        "")
+        sure_text.setStyleSheet("border-width: 0px;\n")
         sure_text.setAlignment(QtCore.Qt.AlignCenter)
         sure_text.setText("You are about to reset all your counts to 0!\nAre you sure you want to do that?")
 
+        verticalLayout.addWidget(sure_text)
+        verticalLayout.addLayout(horizontalLayout)
+        horizontalLayout.addWidget(button_ok)
+        horizontalLayout.addWidget(button_no)
+        horizontalLayout.setAlignment(Qt.AlignCenter)
+        Sure_Dialog.setWindowTitle("Sure?")
 
         Sure_Dialog.show()
-        Sure_Dialog.exec()
 
     def error_2(self):
 
-        self.Error_2_Dialog = QtWidgets.QDialog()
-        self.Error_2_Dialog.resize(400, 126)
-        self.Error_2_Dialog.setStyleSheet("background-color: rgb(52, 61, 54);")
+        Error_2_Dialog = QtWidgets.QDialog(self.centralwidget)
+        Error_2_Dialog.resize(400, 126)
 
-        botton_ok = QtWidgets.QPushButton(self.Error_2_Dialog)
-        botton_ok.setGeometry(QtCore.QRect(120, 70, 151, 31))
+        verticalLayout = QtWidgets.QVBoxLayout(Error_2_Dialog)
+        horizontalLayout = QtWidgets.QHBoxLayout(Error_2_Dialog)
+
+        button_ok = QtWidgets.QPushButton(Error_2_Dialog)
+        button_ok.setGeometry(QtCore.QRect(120, 70, 151, 31))
         font = QtGui.QFont()
         font.setPointSize(9)
-        botton_ok.setFont(font)
-        botton_ok.setText("OK")
-        botton_ok.setStyleSheet("QPushButton {background-color: rgb(55, 72, 57);\n"
-    "border-style: outset;\n"
-    "border-width: 1px;\n"
-    "border-radius: 10px;\n"
-    "border-color: rgb(55, 72, 57);}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(65, 85, 67)}")
-        botton_ok.setDefault(True)
-        botton_ok.clicked.connect(self.Error_2_Dialog.close)
+        button_ok.setFont(font)
+        button_ok.setFixedSize(QtCore.QSize(80, 31))
+        button_ok.setText("OK")
+        button_ok.setStyleSheet("QPushButton {background-color: rgb(41, 96, 125);\n"
+"border-style: outset;\n"
+"border-width: 1px;\n"
+"border-radius: 10px;\n"
+"border-color: rgb(41, 96, 125);\n"
+"color:rgb(0, 0, 0)}\n"
+"QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}")
+        button_ok.setDefault(True)
+        button_ok.clicked.connect(Error_2_Dialog.close)
 
-        error_2_text = QtWidgets.QLabel(self.Error_2_Dialog)
+        error_2_text = QtWidgets.QLabel(Error_2_Dialog)
         error_2_text.setGeometry(QtCore.QRect(0, 0, 400, 70))
         font = QtGui.QFont()
         font.setPointSize(11)
         font.setBold(True)
         font.setWeight(75)
         error_2_text.setFont(font)
-        error_2_text.setStyleSheet("color: rgb(79, 103, 81);\n"
-        "border-style: flat;\n"
-        "border-width: 0px;\n"
-        "border-radius: 0px;\n"
-        "border-width: 0px;\n"
-        "")
+        error_2_text.setStyleSheet("border-width: 0px;\n")
         error_2_text.setAlignment(QtCore.Qt.AlignCenter)
         error_2_text.setText("Can't add! The Profile name already exists.\nChoose another name.")
+        verticalLayout.addWidget(error_2_text)
+        verticalLayout.addLayout(horizontalLayout)
+        horizontalLayout.addWidget(button_ok)
+        horizontalLayout.setAlignment(Qt.AlignCenter)
+        Error_2_Dialog.setWindowTitle("Error!")
 
-
-        self.Error_2_Dialog.show()
-        self.Error_2_Dialog.exec()
+        Error_2_Dialog.show()
 
     def info_window(self):
         info_Dialog = QtWidgets.QDialog(self.centralwidget)
         info_Dialog.resize(160, 80)
+        info_Dialog.setWindowTitle("Info")
         print("Info")
+        verticalLayout = QtWidgets.QVBoxLayout(info_Dialog)
         info_label = QtWidgets.QLabel(info_Dialog)
         info_label.move(10,10)
         font = QtGui.QFont()
@@ -1130,12 +1095,9 @@ class CounterApp(Ui_MainWindow):
         font.setWeight(75)
         font.setKerning(True)
         info_label.setFont(font)
-        info_label.setStyleSheet("background-color: rgb(52, 61, 54);\n"
-"color: rgb(79, 103, 81);\n"
-"")
-        info_label.setText("StuffCounter\nVersion: Qt-0.310\n2020-01-05")
+        info_label.setText("StuffCounter\nVersion: Qt-0.320\n2020-01-05")
+        verticalLayout.addWidget(info_label)
         info_Dialog.show()
-        info_Dialog.exec()
 
     def options(self, action):
         if action.text() == "Quit":
