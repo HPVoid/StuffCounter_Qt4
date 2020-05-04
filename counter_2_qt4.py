@@ -69,7 +69,6 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         def setupUi(self):
             self.setObjectName("MainWindow")
             self.setWindowModality(QtCore.Qt.NonModal)
-            self.resize(776, 584)
             self.setStyleSheet("""
             QWidget {background-color: rgb(33, 76, 100)}
 
@@ -97,7 +96,7 @@ border-color: rgb(41, 96, 125)}
 QLabel {color:rgb(30, 121, 177); border-width: 0px}
 QCheckBox {color: rgb(0,0,0);}
 QCheckBox:disabled {color: gray}
-QScrollArea {background-color: rgb(29, 67, 88); border-width: 0px}
+QScrollArea {background-color: rgb(33, 76, 100); border-width: 0px}
 QGroupBox {border-width: 0px; border-radius: 5px}
 QComboBox {border-width: 0px}
 QComboBox QAbstractItemView {border-width: 0px}
@@ -114,8 +113,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.verticalLayout_main_window.setObjectName("verticalLayout_main_window")
             self.label = QtWidgets.QLabel(self.centralwidget)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
             self.label.setSizePolicy(sizePolicy)
             font = QtGui.QFont()
@@ -130,8 +127,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.verticalLayout_main_window.addWidget(self.label)
             self.frame_just_count = QtWidgets.QFrame(self.centralwidget)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(self.frame_just_count.sizePolicy().hasHeightForWidth())
             self.frame_just_count.setSizePolicy(sizePolicy)
             self.frame_just_count.setAutoFillBackground(False)
@@ -147,8 +142,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.verticalLayout_just_count.setObjectName("verticalLayout_just_count")
             self.label_2 = QtWidgets.QLabel(self.frame_just_count)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
             sizePolicy.setHeightForWidth(self.label_2.sizePolicy().hasHeightForWidth())
             self.label_2.setSizePolicy(sizePolicy)
             font = QtGui.QFont()
@@ -225,7 +218,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             font = QtGui.QFont()
             font.setPointSize(9)
             self.cb_start_active.setFont(font)
-            self.cb_start_active.setAccessibleName("")
             self.cb_start_active.setObjectName("cb_start_active")
             self.gridLayout_click_counter.addWidget(self.cb_start_active, 4, 0, 1, 1)
             self.cb_hide = QtWidgets.QCheckBox(self.frame_click_counter)
@@ -233,7 +225,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             font = QtGui.QFont()
             font.setPointSize(9)
             self.cb_hide.setFont(font)
-            self.cb_hide.setAccessibleName("")
             self.cb_hide.setObjectName("cb_hide")
             self.gridLayout_click_counter.addWidget(self.cb_hide, 6, 0, 1, 1)
             self.label_6 = QtWidgets.QLabel(self.frame_click_counter)
@@ -368,7 +359,6 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.label_3.setObjectName("label_3")
             self.verticalLayout_lmb.addWidget(self.label_3)
             self.lcd_lmb = QtWidgets.QLCDNumber(self.frame_lmb)
-            self.lcd_lmb.setAccessibleName("")
             self.lcd_lmb.setDigitCount(6)
             self.lcd_lmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
             self.lcd_lmb.setObjectName("lcd_lmb")
@@ -975,7 +965,7 @@ class CounterApp(Ui_MainWindow):
         font.setWeight(75)
         font.setKerning(True)
         info_label.setFont(font)
-        info_label.setText("StuffCounter\nVersion: Qt-0.321\n2020-01-05")
+        info_label.setText("StuffCounter\nVersion: Qt-0.322\n2020-04-05")
         verticalLayout.addWidget(info_label)
         info_Dialog.show()
 
