@@ -10,6 +10,7 @@ from datetime import datetime
 import time
 import os
 import getpass
+from PyQt5.QtGui import QImage
 
 class MyEntry(QtWidgets.QTextEdit):
 
@@ -108,7 +109,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.frame_just_count.setAutoFillBackground(False)
             self.frame_just_count.setStyleSheet("border-style: solid;\n"
     "border-width: 2px;\n"
-    "border-radius: 10px;")
+    "border-radius: 10px;\n")
             self.frame_just_count.setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.frame_just_count.setFrameShadow(QtWidgets.QFrame.Sunken)
             self.frame_just_count.setLineWidth(2)
@@ -135,6 +136,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.label_2.setObjectName("label_2")
             self.verticalLayout_just_count.addWidget(self.label_2)
 
+
             self.scroll = QtWidgets.QScrollArea()
             self.scroll.setWidgetResizable(True)
             self.scroll.setStyleSheet("border-width: 0px;\n")
@@ -144,11 +146,8 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             self.form_layout = QtWidgets.QFormLayout()
             self.group_box.setLayout(self.form_layout)
 
-
             self.verticalLayout_just_count.addWidget(self.group_box)
             self.verticalLayout_just_count.addWidget(self.scroll)
-
-
 
             self.horizontalLayout_add_entry = QtWidgets.QHBoxLayout()
             self.horizontalLayout_add_entry.setSpacing(10)
@@ -432,6 +431,7 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
             action_app = self.menubar.addMenu("Options")
             action_app.addAction("Info")
             action_app.addAction("Reset all")
+        #    action_app.addAction("Dolphin")
             quit_action = action_app.addAction("Quit")
             quit_action.setShortcut("Ctrl+Q")
 
@@ -576,7 +576,7 @@ class CounterApp(Ui_MainWindow):
 
         USER_NAME = getpass.getuser()
         self.file_dir = os.path.dirname(os.path.realpath(__file__))
-        self.file_path = self.file_dir + "\counter_2_qt3.exe"
+        self.file_path = self.file_dir + "\counter_2_qt4.exe"
         self.bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % USER_NAME
         #dealing with bugs:
         if os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and not self.cb_auto_start.isChecked():
@@ -606,7 +606,7 @@ class CounterApp(Ui_MainWindow):
             return
 
         with open(self.bat_path + '\\' + "StuffCounter_qt.bat", "w+") as bat_file:
-            bat_file.write(r'set workingdir=%s' % self.file_dir + "\n" + r'pushd %workingdir%' + "\n" + r'start "" counter_2_qt3.exe')
+            bat_file.write(r'set workingdir=%s' % self.file_dir + "\n" + r'pushd %workingdir%' + "\n" + r'start "" counter_2_qt4.exe')
 
     def set_hide(self):
         file3 = open("state.txt","w")
@@ -1081,6 +1081,15 @@ class CounterApp(Ui_MainWindow):
 
         Error_2_Dialog.show()
 
+    #def dolphin(self):
+
+    #    self.scroll.setStyleSheet("border-style: solid;\n"
+#"border-width: 2px;\n"
+#"border-radius: 10px;\n"
+#"background-image: url(dolphin.png)")
+    #    self.resize(776, 800)
+
+
     def info_window(self):
         info_Dialog = QtWidgets.QDialog(self.centralwidget)
         info_Dialog.resize(160, 80)
@@ -1095,7 +1104,7 @@ class CounterApp(Ui_MainWindow):
         font.setWeight(75)
         font.setKerning(True)
         info_label.setFont(font)
-        info_label.setText("StuffCounter\nVersion: Qt-0.320\n2020-01-05")
+        info_label.setText("StuffCounter\nVersion: Qt-0.321\n2020-01-05")
         verticalLayout.addWidget(info_label)
         info_Dialog.show()
 
@@ -1107,7 +1116,8 @@ class CounterApp(Ui_MainWindow):
             self.info_window()
         if action.text() == "Reset all":
             self.sure_2()
-
+        if action.text() == "Dolphin":
+            self.dolphin()
 
 
 app = QtWidgets.QApplication(sys.argv)
@@ -1118,6 +1128,5 @@ if main_window.cb_hide.isChecked():
 else:
     main_window.show()
 main_window.setWindowTitle("Stuff Counter")
-
 
 sys.exit(app.exec_())
