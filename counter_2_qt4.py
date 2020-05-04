@@ -34,26 +34,22 @@ class SystemTray(QtWidgets.QSystemTrayIcon):
 
         menu = QtWidgets.QMenu(parent)
         menu.addAction("Show")
+        menu.addAction("Show folder")
         menu.addAction("Info")
+        menu.addSeparator()
         menu.addAction("Quit")
 
         self.setContextMenu(menu)
-        self.contextMenu().triggered.connect(self.triggered)
+        self.contextMenu().triggered.connect(self.options)
 
         self.activated.connect(self.icon_clicked)
-
-    def triggered(self, action):
-        if action.text() == "Quit":
-            self.hide()
-            app.quit()
-        if action.text() == "Show":
-            main_window.show()
-        if action.text() == "Info":
-            main_window.info_window()
 
     def icon_clicked(self, reason):
         if reason == QtWidgets.QSystemTrayIcon.DoubleClick:
             main_window.show()
+
+    def options(self, action):
+        main_window.options(action)
 
 class Ui_MainWindow(QtWidgets.QMainWindow):
 
@@ -193,6 +189,7 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.entry.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
             self.entry.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
             self.entry.setObjectName("entry")
+            self.entry.setPlaceholderText("Name the stuff that you are counting!")
             self.horizontalLayout_add_entry.addWidget(self.entry)
             self.verticalLayout_just_count.addLayout(self.horizontalLayout_add_entry)
             self.verticalLayout_main_window.addWidget(self.frame_just_count)
@@ -240,6 +237,7 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.label_6.setFrameShape(QtWidgets.QFrame.HLine)
             self.label_6.setLineWidth(0)
             self.label_6.setObjectName("label_6")
+            self.label_6.setToolTip("Shows the clicks of the current hour if automatic export is enabled.")
             self.gridLayout_click_counter.addWidget(self.label_6, 7, 4, 1, 2)
             self.export_click = QtWidgets.QPushButton(self.frame_click_counter)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -367,15 +365,8 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.verticalLayout_main_window.addWidget(self.frame_click_counter)
             self.setCentralWidget(self.centralwidget)
             self.menubar = QtWidgets.QMenuBar(self)
-            self.menubar.setGeometry(QtCore.QRect(0, 0, 776, 21))
             self.menubar.setObjectName("menubar")
             self.setMenuBar(self.menubar)
-            action_app = self.menubar.addMenu("Options")
-            action_app.addAction("Info")
-            action_app.addAction("Reset all")
-        #    action_app.addAction("Dolphin")
-            quit_action = action_app.addAction("Quit")
-            quit_action.setShortcut("Ctrl+Q")
 
             self.statusbar = QtWidgets.QStatusBar(self)
             self.statusbar.setObjectName("statusbar")
@@ -465,15 +456,36 @@ class CounterApp(Ui_MainWindow):
         super().__init__()
         super().setupUi()
         super().retranslateUi()
-
+        #get dir and path:
+        USER_NAME = getpass.getuser()
+        self.file_dir = os.path.dirname(os.path.realpath(__file__))
+        self.file_path = self.file_dir + "\counter_2_qt4.exe"
+        self.bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % USER_NAME
+        #dealing with bugs:
+        if os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and not self.cb_auto_start.isChecked():
+            self.cb_auto_start.setChecked(True)
+        if not os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and self.cb_auto_start.isChecked():
+            self.cb_auto_start.setChecked(False)
+        #setup menubar:
+        option_menu = self.menubar.addMenu("Options")
+        option_menu.addAction("Info")
+        option_menu.addAction("Reset all")
+        option_menu.addAction("Show folder")
+    #   option_menu.addAction("Dolphin")
+        option_menu.addSeparator()
+        quit_action = option_menu.addAction("Quit")
+        quit_action.setShortcut("Ctrl+Q")
         self.menubar.triggered.connect(self.options)
-
+        #connect buttons:
         self.add.clicked.connect(self.add_profile_wrap)
         self.reset.clicked.connect(self.sure)
         self.export_click.clicked.connect(self.click_export)
         self.click.clicked[bool].connect(self.click_counter)
-
         #open click counts on startup
+        if not os.path.exists("click_count.txt"):
+            file2 = open("click_count.txt", "w")
+            file2.write("0 0 0 0")
+            file2.close()
         file2 = open("click_count.txt","r")
         click_count_list = file2.read().split(" ")
         self.click_count_l = int(click_count_list[0])
@@ -484,6 +496,10 @@ class CounterApp(Ui_MainWindow):
         self.lcd_rmb.display(self.click_count_r)
 
         #open profiles on startup
+        if not os.path.exists("profile_dict.txt"):
+            file1 = open("profile_dict.txt", "w")
+            file1.write("{}")
+            file1.close()
         file1 = open("profile_dict.txt","r")
         self.profile_dict = eval(file1.read())
         self.profiles = {}
@@ -498,6 +514,10 @@ class CounterApp(Ui_MainWindow):
             self.add_frame(key)
 
         #open the state of checkboxes on startup
+        if not os.path.exists("state.txt"):
+            file3 = open("state.txt", "w")
+            file3.write("[False, False, False, False]")
+            file3.close()
         self.cb_start_active.checkStateSet()
         file3 = open("state.txt","r")
         file3_list = eval(file3.read())
@@ -515,16 +535,6 @@ class CounterApp(Ui_MainWindow):
         self.cb_auto_export.stateChanged.connect(self.set_auto_export)
         self.cb_hide.stateChanged.connect(self.set_hide)
         self.cb_auto_export.setEnabled(False)
-
-        USER_NAME = getpass.getuser()
-        self.file_dir = os.path.dirname(os.path.realpath(__file__))
-        self.file_path = self.file_dir + "\counter_2_qt4.exe"
-        self.bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % USER_NAME
-        #dealing with bugs:
-        if os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and not self.cb_auto_start.isChecked():
-            self.cb_auto_start.setChecked(True)
-        if not os.path.exists(self.bat_path + '\\' + "StuffCounter_qt.bat") and self.cb_auto_start.isChecked():
-            self.cb_auto_start.setChecked(False)
 
         self.start_active()
 
@@ -721,14 +731,19 @@ class CounterApp(Ui_MainWindow):
     def click_export_ok(self):
 
         def write_exp_file_txt():
-            exp_file = open((self.export_entry.toPlainText()+".txt"),"w")
-            exp_file.write("LMB: "+str(self.click_count_l)+" RMB: "+str(self.click_count_r))
-            exp_file.close()
-
+            try:
+                exp_file = open((self.export_entry.toPlainText()+".txt"),"w")
+                exp_file.write("LMB: "+str(self.click_count_l)+" RMB: "+str(self.click_count_r))
+                exp_file.close()
+            except:
+                pass
         def write_exp_file_csv():
-            exp_file = open((self.export_entry.toPlainText()+".csv"),"w")
-            exp_file.write("LMB; RMB\n{0}; {1}".format(str(self.click_count_l), str(self.click_count_r)))
-            exp_file.close()
+            try:
+                exp_file = open((self.export_entry.toPlainText()+".csv"),"w")
+                exp_file.write("LMB; RMB\n{0}; {1}".format(str(self.click_count_l), str(self.click_count_r)))
+                exp_file.close()
+            except:
+                pass
 
         if self.dropdown.currentIndex() == 0:
             write_exp_file_txt()
@@ -969,16 +984,23 @@ class CounterApp(Ui_MainWindow):
         verticalLayout.addWidget(info_label)
         info_Dialog.show()
 
+    def show_folder(self):
+        os.startfile(self.file_dir)
+
     def options(self, action):
         if action.text() == "Quit":
             self.hide()
             app.quit()
+        if action.text() == "Show":
+            main_window.show()
         if action.text() == "Info":
             self.info_window()
         if action.text() == "Reset all":
             self.sure_2()
         if action.text() == "Dolphin":
             self.dolphin()
+        if action.text() == "Show folder":
+            self.show_folder()
 
 
 app = QtWidgets.QApplication(sys.argv)
