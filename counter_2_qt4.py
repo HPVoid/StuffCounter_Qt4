@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtGui import QImage
 import sys
 from counter_main_window import Ui_MainWindow, MyEntry, Mainwindow_changed
 from counterprofile1 import CounterProfile
@@ -10,9 +11,9 @@ from datetime import datetime
 import time
 import os
 import getpass
-from PyQt5.QtGui import QImage
 
-class MyEntry(QtWidgets.QTextEdit):
+
+class MyEntry(QtWidgets.QLineEdit):
 
     def __init__(self, parent, master, function):
         super().__init__(parent)
@@ -78,16 +79,18 @@ color:rgb(0, 0, 0)}
 QPushButton:pressed {border-style: solid; background-color:  rgb(30, 121, 177); color:rgb(0, 0, 0)}
 QFrame {border-style: solid;
 border-width: 2px;
-border-radius: 10px; border-color:rgb(30, 121, 177);}
+border-radius: 10px;
+border-color:rgb(30, 121, 177);}
 
-QTextEdit {background-color:rgb(0, 0, 0);
-color: rgb(30, 121, 177)}
+QLineEdit {background-color:rgb(0, 0, 0);
+color: rgb(30, 121, 177);
+border-radius: 10px;}
 
 QLCDNumber {border-radius: 5px;
 gridline-color: rgb(0, 85, 0);
 color: rgb(170, 0, 0);
 background-color: rgb(0, 0, 0);
-border-color: rgb(41, 96, 125)}
+border-width: 0px}
 
 QLabel {color:rgb(30, 121, 177); border-width: 0px}
 QCheckBox {color: rgb(0,0,0);}
@@ -181,13 +184,8 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.entry.setSizeIncrement(QtCore.QSize(150, 31))
             font = QtGui.QFont()
             font.setPointSize(11)
-            font.setBold(False)
             font.setWeight(50)
             self.entry.setFont(font)
-            self.entry.setLineWidth(1)
-            self.entry.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-            self.entry.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-            self.entry.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
             self.entry.setObjectName("entry")
             self.entry.setPlaceholderText("Name the stuff that you are counting!")
             self.horizontalLayout_add_entry.addWidget(self.entry)
@@ -308,7 +306,9 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.lcd_rmb = QtWidgets.QLCDNumber(self.frame_rmb)
             self.lcd_rmb.setFrameShape(QtWidgets.QFrame.StyledPanel)
             self.lcd_rmb.setSmallDecimalPoint(False)
-            self.lcd_rmb.setDigitCount(6)
+#digit count auf 8 erhöhen!
+            self.lcd_rmb.setDigitCount(8)
+
             self.lcd_rmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
             self.lcd_rmb.setProperty("intValue", 0)
             self.lcd_rmb.setObjectName("lcd_rmb")
@@ -357,7 +357,9 @@ QComboBox QAbstractItemView {border-width: 0px}
             self.label_3.setObjectName("label_3")
             self.verticalLayout_lmb.addWidget(self.label_3)
             self.lcd_lmb = QtWidgets.QLCDNumber(self.frame_lmb)
-            self.lcd_lmb.setDigitCount(6)
+#digit count auf 8 erhöhen!
+            self.lcd_lmb.setDigitCount(8)
+#digit count auf 8 erhöhen!
             self.lcd_lmb.setSegmentStyle(QtWidgets.QLCDNumber.Flat)
             self.lcd_lmb.setObjectName("lcd_lmb")
             self.verticalLayout_lmb.addWidget(self.lcd_lmb)
@@ -401,6 +403,8 @@ class ClickCounterThread(QtCore.QThread):
         click_count_list = file2.read().split(" ")
 
     def run(self):
+
+        print(win32api.GetKeyState(0x097))
 
         self.state_left = win32api.GetKeyState(0x01)
         self.state_right = win32api.GetKeyState(0x02)
@@ -447,7 +451,6 @@ class LogTimeThread(QtCore.QThread):
             file_time.close()
             self.master.auto_export(0)
             print(now_datetime)
-
             time.sleep(1)
 
 class CounterApp(Ui_MainWindow):
@@ -459,6 +462,7 @@ class CounterApp(Ui_MainWindow):
         #get dir and path:
         USER_NAME = getpass.getuser()
         self.file_dir = os.path.dirname(os.path.realpath(__file__))
+        self.log_dir = self.file_dir + "\log"
         self.file_path = self.file_dir + "\counter_2_qt4.exe"
         self.bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % USER_NAME
         #dealing with bugs:
@@ -587,6 +591,8 @@ class CounterApp(Ui_MainWindow):
             file_time2 = open("timelog.txt", "w")
             file_time2.write(datetime.now().isoformat(timespec='seconds') + "\n" + datetime.now().isoformat(timespec='seconds'))
             file_time2.close()
+        if not os.path.exists(self.log_dir):
+            os.makedirs(self.log_dir)
         file_time2 = open("timelog.txt", "r")
         time_list = file_time2.read().split("\n")
         #time of starting the timelog:
@@ -604,14 +610,14 @@ class CounterApp(Ui_MainWindow):
         #creating the automatic export csv file:
         if start_hour != last_end_hour or start_date != last_end_date:
             #creating new file with header if there is no file with this date yet:
-            if not os.path.exists(last_end_date + ".csv"):
-                exp_file = open((last_end_date + ".csv"),"a")
+            if not os.path.exists("{0}\{1}.csv".format(self.log_dir, last_end_date)):
+                exp_file = open("{0}\{1}.csv".format(self.log_dir, last_end_date),"a")
                 exp_file.write("hour; LMB; RMB")
                 for i in range(int(last_end_hour)):
                     exp_file.write("\n{0}; 0; 0".format(str(i)))
                 exp_file.close()
             #appending another line with the click counts of the last active hour:
-            exp_file = open((last_end_date + ".csv"),"a")
+            exp_file = open("{0}\{1}.csv".format(self.log_dir, last_end_date),"a")
             exp_file.write("\n{0}; {1}; {2}".format(last_end_hour, str(self.click_count_l_temp), str(self.click_count_r_temp)))
 
             #for the case that the last active hour is more than one hour ago, the inactive hours in between fill be added with 0; 0:
@@ -627,8 +633,8 @@ class CounterApp(Ui_MainWindow):
                     inactive_hours = int(last_end_hour) + i
                     exp_file.write("\n{0}; 0; 0".format(str(inactive_hours)))
                 #also a new file for today is being created with 0; 0 until the time right now (is if not os.path.exists(start_date + ".csv") actually necessary in this case???)
-                if not os.path.exists(start_date + ".csv"):
-                    exp_file_today = open((start_date + ".csv"),"a")
+                if not os.path.exists("{0}\{1}.csv".format(self.log_dir, start_date)):
+                    exp_file_today = open("{0}\{1}.csv".format(self.log_dir, start_date),"a")
                     exp_file_today.write("hour; LMB; RMB")
                     for i in range(int(start_hour)):
                         exp_file_today.write("\n{0}; 0; 0".format(str(i)))
@@ -649,7 +655,7 @@ class CounterApp(Ui_MainWindow):
     "border-width: 1px;\n"
     "border-radius: 10px;\n"
     "border-color: rgb(125, 45, 76); color: rgb(0, 0, 0)}\n"
-    "QPushButton:pressed {border-style: solid; background-color:  rgb(125, 45, 76), color: rgb(0, 0, 0)}")
+    "QPushButton:pressed {border-style: solid; background-color: rgb(125, 45, 76); color: rgb(0, 0, 0)}")
             self.statusbar.showMessage("All your clicks are being counted")
             self.cb_auto_export.setEnabled(True)
             if self.cb_auto_export.isChecked():
@@ -679,7 +685,6 @@ class CounterApp(Ui_MainWindow):
 
         self.clickcounter_thread = ClickCounterThread(self)
         self.clickcounter_thread.start()
-
 
     def reset_click_counter(self):
         self.click_count_l = 0
@@ -727,7 +732,6 @@ class CounterApp(Ui_MainWindow):
         file_time.write(now_datetime + "\n" + now_datetime)
         file_time.close()
 
-
     def click_export_ok(self):
 
         def write_exp_file_txt():
@@ -762,14 +766,12 @@ class CounterApp(Ui_MainWindow):
         export_text = QtWidgets.QLabel(Export_Dialog)
         font = QtGui.QFont()
         font.setPointSize(9)
-        font.setBold(True)
         font.setWeight(75)
         export_text.setFont(font)
         export_text.setText("Filename:")
         self.export_entry = MyEntry(parent=Export_Dialog, master=self, function=self.click_export_ok)
         font = QtGui.QFont()
         font.setPointSize(11)
-        font.setBold(False)
         font.setWeight(75)
         self.export_entry.setFont(font)
         self.export_entry.setFixedHeight(30)
@@ -803,7 +805,13 @@ class CounterApp(Ui_MainWindow):
         call_profile = self.profiles[title](self, title)
 
     def add_profile_wrap(self):
-        self.add_profile(self.entry.toPlainText())
+        if self.entry.text() == "":
+            self.add_profile("-No name-")
+        else:
+            self.add_profile(self.entry.text())
+            print(self.entry.text())
+            print(type(self.entry.text()))
+
         self.entry.clear()
 
     def add_profile(self, title):
@@ -980,7 +988,7 @@ class CounterApp(Ui_MainWindow):
         font.setWeight(75)
         font.setKerning(True)
         info_label.setFont(font)
-        info_label.setText("StuffCounter\nVersion: Qt-0.322\n2020-04-05")
+        info_label.setText("StuffCounter\nVersion: Qt-0.325\n2021-04-01")
         verticalLayout.addWidget(info_label)
         info_Dialog.show()
 
